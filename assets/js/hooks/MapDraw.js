@@ -29,12 +29,35 @@ export default {
       })
     })
 
-    this.map.on("draw.update", ({ features: _features, action: _action }) => {
+    this.map.on("draw.update", ({ features, action: _action }) => {
+      const blocks = features.reduce((blocks, feature) => ({
+        ...blocks,
+        [feature.id]: { geometry: feature.geometry }
+      }), {})
+
+      this.pushEvent("update_blocks", { blocks })
     })
 
     this.map.on("draw.delete", ({ features }) => {
       this.pushEvent("delete_blocks", { block_ids: features.map(({ id }) => id) })
     })
+
+    const combineHandler = ({ createdFeatures, deletedFeatures }) => {
+      this.pushEvent("delete_blocks", { block_ids: deletedFeatures.map(({ id }) => id) })
+
+      const features = createdFeatures
+      this.pushEvent("create_blocks", { features }, (reply, _ref) => {
+        features.forEach((feature, index) => {
+          const drawFeature = this.draw.get(feature.id)
+
+          this.draw.delete(feature.id)
+          this.draw.add({ ...drawFeature, id: reply.block_ids[index] })
+        })
+      })
+    }
+
+    this.map.on("draw.combine", combineHandler)
+    this.map.on("draw.uncombine", combineHandler)
 
     this.handleEvent("insert_features", ({ features }) => {
       if (this.draw.getMode() !== "simple_select") return
