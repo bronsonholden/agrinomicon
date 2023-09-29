@@ -18,24 +18,25 @@ defmodule AgrinomiconWeb.BlocksLive do
 
   @impl true
   @spec handle_info(
-          {:update_block, %Agrinomicon.Agency.Block{}},
+          {:update_block, list(String.t())},
           Phoenix.LiveView.Socket.t()
         ) :: {:noreply, Phoenix.LiveView.Socket.t()}
-  def handle_info({:update_block, %Agency.Block{} = block}, socket) do
+  def handle_info({:update_blocks, block_ids}, socket) do
     socket =
       push_event(socket, "insert_features", %{
-        features: [
-          Agrinomicon.Query.block_with_production(block.id)
-          |> feature_for_block()
-        ]
+        features:
+          AgrinomiconWeb.EditBlocks.list_blocks_with_production(block_ids)
+          |> Enum.map(&feature_for_block/1)
       })
 
     {:noreply, socket}
   end
 
-  def handle_info({:delete_block, deleted_block}, socket) do
+  def handle_info({:delete_blocks, block_ids}, socket) do
     socket =
-      push_event(socket, "remove_features", %{features: [%{id: deleted_block.id}]})
+      push_event(socket, "remove_features", %{
+        features: Enum.map(block_ids, fn id -> %{id: id} end)
+      })
 
     {:noreply, socket}
   end
@@ -45,7 +46,7 @@ defmodule AgrinomiconWeb.BlocksLive do
     socket = assign(socket, lng: lng, lat: lat)
 
     features =
-      Agrinomicon.Query.blocks_with_production_near(lng, lat)
+      AgrinomiconWeb.EditBlocks.list_blocks_with_production_near(lng, lat)
       |> Enum.map(&feature_for_block/1)
 
     socket =
@@ -139,45 +140,22 @@ defmodule AgrinomiconWeb.BlocksLive do
 
   @impl true
   def handle_event("create_blocks", %{"features" => features}, socket) do
-    blocks =
-      features
-      |> Enum.map(fn feature ->
-        result =
-          Agrinomicon.Agency.create_block(%{
-            "feature" => %{"geometry" => feature["geometry"]}
-          })
-
-        with {:ok, new_block} <- result do
-          new_block
-        else
-          _ -> nil
-        end
-      end)
-
-    blocks
-    |> Enum.reject(&is_nil/1)
-    |> Enum.each(fn block ->
-      Agrinomicon.USDACDL.UpdateBlockTenures.new(%{"block_id" => block.id})
-      |> Oban.insert()
-    end)
-
-    reply = %{
-      block_ids:
-        Enum.map(blocks, fn block ->
-          if block, do: block.id
-        end)
-    }
+    new_blocks = AgrinomiconWeb.EditBlocks.create_blocks(features)
+    reply = %{block_ids: Enum.map(new_blocks, fn block -> block.id end)}
 
     {:reply, reply, socket}
   end
 
   @impl true
   def handle_event("delete_blocks", %{"block_ids" => block_ids}, socket) do
-    Enum.each(block_ids, fn id ->
-      with {:ok, deleted_block} <- Agency.delete_block(%Agency.Block{id: id}) do
-        Phoenix.PubSub.broadcast(Agrinomicon.PubSub, "blocks", {:delete_block, deleted_block})
-      end
-    end)
+    AgrinomiconWeb.EditBlocks.delete_blocks(block_ids)
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("update_blocks", %{"blocks" => blocks}, socket) do
+    AgrinomiconWeb.EditBlocks.update_feature_for_blocks(blocks)
 
     {:noreply, socket}
   end

@@ -1,4 +1,4 @@
-defmodule Agrinomicon.USDACDL.UpdateBlockTenures do
+defmodule AgrinomiconWeb.USDACDL.UpdateBlockTenures do
   alias Agrinomicon.Agency
   alias Agrinomicon.Taxonomy
 
@@ -42,7 +42,7 @@ defmodule Agrinomicon.USDACDL.UpdateBlockTenures do
 
     {:ok, block} = Agency.update_block(block, %{tenures: tenures_attrs})
 
-    Phoenix.PubSub.broadcast(Agrinomicon.PubSub, "blocks", {:update_block, block})
+    Phoenix.PubSub.broadcast(Agrinomicon.PubSub, "blocks", {:update_blocks, [block.id]})
   end
 
   @doc """
