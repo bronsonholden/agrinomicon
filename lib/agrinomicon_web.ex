@@ -17,7 +17,8 @@ defmodule AgrinomiconWeb do
   those modules here.
   """
 
-  def static_paths, do: ~w(assets fonts images favicon.ico favicon.svg robots.txt)
+  def static_paths,
+    do: ~w(assets fonts images favicon.ico favicon.svg favicon-48x48.png robots.txt)
 
   def router do
     quote do
