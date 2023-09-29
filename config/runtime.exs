@@ -23,7 +23,7 @@ end
 mapbox_access_token = System.get_env("MAPBOX_ACCESS_TOKEN")
 
 if mapbox_access_token do
-  config :agrinomicon, :mabpox_access_token, mapbox_access_token
+  config :agrinomicon, :mapbox_access_token, mapbox_access_token
 end
 
 if config_env() == :prod do
