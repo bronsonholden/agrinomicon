@@ -9,8 +9,8 @@ export default {
       styles: DRAW_STYLES,
       controls: {
         polygon: true,
-        combine_features: true,
-        uncombine_features: true,
+        combine_features: false,
+        uncombine_features: false,
         trash: true
       },
       userProperties: true
@@ -34,18 +34,6 @@ export default {
 
     this.map.on("draw.delete", ({ features }) => {
       this.pushEvent("delete_blocks", { block_ids: features.map(({ id }) => id) })
-    })
-
-    this.map.on("draw.combine", ({
-      deletedFeatures: _deletedFeatures,
-      createdFeatures: _createdFeatures
-    }) => {
-    })
-
-    this.map.on("draw.uncombine", ({
-      deletedFeatures: _deletedFeatures,
-      createdFeatures: _createdFeatures
-    }) => {
     })
 
     this.handleEvent("insert_features", ({ features }) => {
