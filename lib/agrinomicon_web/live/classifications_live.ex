@@ -36,8 +36,14 @@ defmodule AgrinomiconWeb.ClassificationsLive do
 
   @spec display_name(%Taxonomy.Classification{}) :: String.t()
   defp display_name(classification) do
-    classification.common_names
-    |> Enum.at(0)
-    |> String.capitalize()
+    case classification.common_names do
+      nil ->
+        classification.binomial_name
+
+      names ->
+        names
+        |> Enum.at(0)
+        |> String.capitalize()
+    end
   end
 end
