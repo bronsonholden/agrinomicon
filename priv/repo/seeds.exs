@@ -39,7 +39,7 @@ Agrinomicon.Repo.insert!(%Agrinomicon.Taxonomy.Classification{
   binomial_name: "Vitis vinifera",
   aliases: [],
   common_names: ["table grape"],
-  cdl_value: "704489",
+  cdl_value: "69",
   geometry_color: "704489"
 })
 
