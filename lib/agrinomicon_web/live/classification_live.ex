@@ -18,6 +18,9 @@ defmodule AgrinomiconWeb.ClassificationLive do
   @impl true
   def render(assigns) do
     ~H"""
+    <.link navigate={~p"/classifications"}>
+      <.icon name="hero-arrow-left-mini" /> All Classifications
+    </.link>
     <.form for={@form} phx-submit="update_classification">
       <.input field={@form[:binomial_name]} label="Binomial name" />
       <.input field={@form[:common_names]} multiple label="Common name" />
