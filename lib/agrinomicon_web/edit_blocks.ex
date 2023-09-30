@@ -67,7 +67,16 @@ defmodule AgrinomiconWeb.EditBlocks do
 
     {:ok, _} = Repo.transaction(multi)
 
-    Phoenix.PubSub.broadcast(Agrinomicon.PubSub, "blocks", {:update_blocks, Map.keys(blocks)})
+    block_ids = Map.keys(blocks)
+
+    Phoenix.PubSub.broadcast(Agrinomicon.PubSub, "blocks", {:update_blocks, block_ids})
+
+    # queue up CDL jobs, which will send a follow-up pubsub message once updated
+    block_ids
+    |> Enum.each(fn id ->
+      AgrinomiconWeb.USDACDL.UpdateBlockTenures.new(%{"block_id" => id})
+      |> Oban.insert()
+    end)
   end
 
   def delete_blocks(block_ids) do
