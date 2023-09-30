@@ -20,6 +20,7 @@ defmodule AgrinomiconWeb.ClassificationLive do
     ~H"""
     <.form for={@form} phx-submit="update_classification">
       <.input field={@form[:binomial_name]} label="Binomial name" />
+      <.input field={@form[:common_names]} multiple label="Common name" />
       <.input field={@form[:cdl_value]} label="CDL Value" />
       <.input field={@form[:geometry_color]} label="Geometry color" />
       <.button type="submit">Update</.button>
