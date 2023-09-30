@@ -1,8 +1,6 @@
 defmodule AgrinomiconWeb.BlocksLive do
   use AgrinomiconWeb, :live_view
 
-  alias Agrinomicon.Agency
-
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket) do
