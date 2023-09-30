@@ -20,6 +20,7 @@ defmodule AgrinomiconWeb.Router do
     live "/", DashboardLive, :index
     live "/blocks", BlocksLive, :index
     live "/classifications", ClassificationsLive, :index
+    live "/classifications/new", NewClassificationLive, :show
     live "/classifications/:id", ClassificationLive, :show
   end
 

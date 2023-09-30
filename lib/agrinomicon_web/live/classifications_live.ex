@@ -13,6 +13,7 @@ defmodule AgrinomiconWeb.ClassificationsLive do
   @impl true
   def render(assigns) do
     ~H"""
+    <.link navigate={~p"/classifications/new"}>New</.link>
     <table>
       <thead>
         <tr>
