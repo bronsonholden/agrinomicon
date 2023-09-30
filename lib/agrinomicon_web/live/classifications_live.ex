@@ -22,7 +22,11 @@ defmodule AgrinomiconWeb.ClassificationsLive do
       </thead>
       <tbody>
         <tr :for={classification <- @classifications}>
-          <td class="px-2"><%= display_name(classification) %></td>
+          <td class="px-2">
+            <.link navigate={~p"/classifications/#{classification.id}"}>
+              <%= display_name(classification) %>
+            </.link>
+          </td>
           <td class="italic px-2"><%= classification.binomial_name %></td>
         </tr>
       </tbody>

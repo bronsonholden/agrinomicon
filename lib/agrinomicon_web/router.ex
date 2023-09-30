@@ -20,6 +20,7 @@ defmodule AgrinomiconWeb.Router do
     live "/", DashboardLive, :index
     live "/blocks", BlocksLive, :index
     live "/classifications", ClassificationsLive, :index
+    live "/classifications/:id", ClassificationLive, :show
   end
 
   # Other scopes may use custom stacks.
