@@ -16,7 +16,7 @@ defmodule AgrinomiconWeb.BlocksLive do
 
   @impl true
   @spec handle_info(
-          {:update_block, list(String.t())},
+          {:update_blocks, list(String.t())},
           Phoenix.LiveView.Socket.t()
         ) :: {:noreply, Phoenix.LiveView.Socket.t()}
   def handle_info({:update_blocks, block_ids}, socket) do
