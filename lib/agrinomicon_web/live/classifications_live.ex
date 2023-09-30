@@ -19,6 +19,8 @@ defmodule AgrinomiconWeb.ClassificationsLive do
         <tr>
           <th class="px-2 text-left">Name</th>
           <th class="px-2 text-left">Binomial name</th>
+          <th class="px-2 text-left">CDL ID</th>
+          <th class="px-2 text-left">Color</th>
         </tr>
       </thead>
       <tbody>
@@ -29,6 +31,8 @@ defmodule AgrinomiconWeb.ClassificationsLive do
             </.link>
           </td>
           <td class="italic px-2"><%= classification.binomial_name %></td>
+          <td class="px-2 font-mono font-medium"><%= classification.cdl_value %></td>
+          <td class="px-2 font-mono font-medium"><%= classification.geometry_color %></td>
         </tr>
       </tbody>
     </table>
