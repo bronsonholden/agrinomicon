@@ -62,6 +62,9 @@ export default Map = {
     })
   },
   destroyed() {
-    this.map.remove()
+    // remove on next tick so any controls, layers, sources can be cleaned up first
+    setTimeout(() => {
+      this.map.remove()
+    }, 0)
   }
 }
