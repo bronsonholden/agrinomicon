@@ -6,7 +6,7 @@
 
      ```ex
      config :agrinomicon,
-            :mapbox_access_token
+            :mapbox_access_token,
             "<paste Mapbox token here>"
      ```
 4. Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
