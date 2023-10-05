@@ -127,7 +127,7 @@ defmodule AgrinomiconWeb.EditBlocks do
       join: f in GIS.Feature,
       on: b.feature_id == f.id,
       # TODO: Bounding box? Order by distance from camera + 1k limit?
-      where: st_distance(st_centroid(f.geometry), st_point(^x, ^y)) < 0.3,
+      where: st_distance(st_centroid(f.geometry), st_point(^x, ^y)) < 5,
       preload: [
         :feature,
         tenures: ^tenures
