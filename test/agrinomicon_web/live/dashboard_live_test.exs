@@ -4,7 +4,11 @@ defmodule AgrinomiconWeb.DashboardLiveTest do
   import Phoenix.LiveViewTest
 
   test "shows dashboard", %{conn: conn} do
-    {:ok, _live_view, html} = live(conn, ~p"/")
+    result =
+      live(conn, ~p"/")
+      |> follow_redirect(conn, ~p"/blocks")
+
+    {:ok, _live_view, html} = result
 
     assert html
   end
